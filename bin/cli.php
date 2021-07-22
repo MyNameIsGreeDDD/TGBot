@@ -1,12 +1,7 @@
 <?php
-include('Bot/Cli/CurrencyTrack.php');
-include('Bot/Api/TelegramApi.php');
-include('Bot/Api/CurrencyApi.php');
-
+include(__DIR__ . '../vendor/autoload.php');
 
 unset($argv[0]);
-
-require __DIR__ . '/../vendor/autoload.php';
 
 $className = '\\Bot\\Cli\\' . array_shift($argv);
 
@@ -22,4 +17,4 @@ foreach ($argv as $argument) {
 }
 
 $class = new $className($params);
-$class->getUsd();
+$class->getUsdSubscribedUsers();

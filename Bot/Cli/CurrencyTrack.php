@@ -2,43 +2,45 @@
 
 namespace Bot\Cli;
 
-use Bot\Api\CurrencyApi\CurrencyApi;
+use Bot\Api\CurrencyApi;
 use Bot\Api\TelegramApi;
-use Db;
-use stdClass;
+use Bot\Service\CurrencyService;
+use GuzzleHttp\Exception\GuzzleException;
+use JetBrains\PhpStorm\Pure;
+
 
 class CurrencyTrack
 {
     protected TelegramApi $tgApi;
 
-    protected CurrencyApi $currApi;
+    protected CurrencyApi $currencyApi;
+
+    protected CurrencyService $currencyService;
 
     public function __construct()
     {
         $this->tgApi = new  TelegramApi();
-        $this->currApi = new CurrencyApi();
+        $this->currencyApi = new CurrencyApi();
+        $this->currencyService = new CurrencyService();
     }
 
-    public function getUsd()
+    /**
+     * @throws GuzzleException
+     */
+    public function getUsdSubscribedUsers(): void
     {
-        $usd = $this->currApi->getCurrency('USD');
+        $subscribes = $this->currencyService->findAll('subscription_users');
 
-        $db = Db::getInstance();
-
-        $subscribes = $db->query('SELECT * FROM `subscription_users`;', [], stdClass::class);
-
-        $date = date('d/m/Y', strtotime(' +1 day'));
-        $currentDate = date('d/m/Y');
+        $date = date('y.m.d', strtotime(' +1 day'));
+        $currentDate = date('y.m.d');
 
         foreach ($subscribes as $subscribe) {
 
-            $chatId = $subscribe->chat_id;
-
             if ($subscribe->notify_at === $currentDate) {
 
-                $this->tgApi->sendMessage($chatId, 'Курс USD на сегоднешний день: ' . $usd);
+                $this->tgApi->sendMessage($subscribe->chat_id, 'Курс USD на сегоднешний день: ' . $this->currencyApi->getCurrency('USD'));
 
-                $db->query('UPDATE `subscription_users` SET notify_at = :notify_at WHERE chat_id = :chat_id;', ['chat_id' => $chatId, 'notify_at' => $date], stdClass::class);
+                $this->currencyService->dateUpdate($subscribe->chat_id, $date);
             }
         }
     }

@@ -1,8 +1,13 @@
 {
-    "require": {
-        "guzzlehttp/guzzle": "^7.3",
-      "ext-simplexml": "*",
-      "ext-pdo": "*",
-      "ext-json": "*"
+  "autoload": {
+    "psr-4": {
+      "Bot\\": "Bot/"
     }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "^7.3",
+    "ext-simplexml": "*",
+    "ext-pdo": "*",
+    "ext-json": "*"
+  }
 }

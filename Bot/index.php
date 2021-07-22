@@ -1,16 +1,11 @@
 <?php
 include('../vendor/autoload.php');
-include('Api/TelegramApi.php');
-include('Api/CurrencyApi.php');
-include('Service/Db.php');
-include('Controllers/CommandController.php');
 
-
-$telegramBot = new \Bot\Api\TelegramApi();
+$telegramApi = new \Bot\Api\TelegramApi();
 
 while (true) {
     sleep(2);
-    $updates = $telegramBot->getUpdates();
+    $updates = $telegramApi->getUpdates();
     $update = end($updates);
 
 
@@ -28,6 +23,10 @@ while (true) {
             break;
         }
     }
+    if (!$isRouteFound) {
+        $telegramApi->sendMessage($update->message->chat->id, 'Я не знаю такую команду :( ' . PHP_EOL . 'Вызовите /help, чтобы посмотреть список доступных команд');
+    }
+
     unset($matches[0]);
 
     $controllerName = $controllerAndAction[0];

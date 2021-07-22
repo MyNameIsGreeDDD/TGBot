@@ -1,5 +1,9 @@
 <?php
 
+namespace Bot\Service;
+
+use PDO;
+
 class Db
 {
 

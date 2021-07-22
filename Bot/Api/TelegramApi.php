@@ -3,6 +3,7 @@
 namespace Bot\Api;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class TelegramApi
 {
@@ -11,6 +12,9 @@ class TelegramApi
     private string $token = '1911236850:AAHjRfnJCAIij9JSWUe3jLx_PLvGOqjYJTI';
 
 
+    /**
+     * @throws GuzzleException
+     */
     public function query(string $method, array $params = [])
     {
         $url = 'https://api.telegram.org/bot';
@@ -33,6 +37,9 @@ class TelegramApi
     }
 
 
+    /**
+     * @throws GuzzleException
+     */
     public function getUpdates()
     {
         $response = $this->query('getUpdates',
@@ -49,6 +56,9 @@ class TelegramApi
 
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function sendMessage($chatId, $text)
     {
         return $this->query('sendMessage',
