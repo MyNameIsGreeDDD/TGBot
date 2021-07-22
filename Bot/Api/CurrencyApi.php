@@ -1,6 +1,6 @@
 <?php
 
-namespace Bot\Api\CurrencyApi;
+namespace Bot\Api;
 
 class CurrencyApi
 {

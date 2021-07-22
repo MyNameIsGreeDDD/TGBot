@@ -28,13 +28,18 @@ class CurrencyTrack
         $subscribes = $db->query('SELECT * FROM `subscription_users`;', [], stdClass::class);
 
         $date = date('d/m/Y', strtotime(' +1 day'));
+        $currentDate = date('d/m/Y');
 
         foreach ($subscribes as $subscribe) {
-            $chatId = $subscribe['chat_id'];
 
-            $this->tgApi->sendMessage($chatId, 'Курс USD на сегоднешний день: ' . $usd);
+            $chatId = $subscribe->chat_id;
 
-            $db->query('UPDATE `subscription_users` SET notify_at = :notify_at WHERE chat_id = :chat_id;', ['chat_id' => $chatId, 'notify_at' => $date], stdClass::class);
+            if ($subscribe->notify_at === $currentDate) {
+
+                $this->tgApi->sendMessage($chatId, 'Курс USD на сегоднешний день: ' . $usd);
+
+                $db->query('UPDATE `subscription_users` SET notify_at = :notify_at WHERE chat_id = :chat_id;', ['chat_id' => $chatId, 'notify_at' => $date], stdClass::class);
+            }
         }
     }
 

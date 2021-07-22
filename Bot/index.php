@@ -3,7 +3,7 @@ include('../vendor/autoload.php');
 include('Api/TelegramApi.php');
 include('Api/CurrencyApi.php');
 include('Service/Db.php');
-include('Controllers/MainController.php');
+include('Controllers/CommandController.php');
 
 
 $telegramBot = new \Bot\Api\TelegramApi();
